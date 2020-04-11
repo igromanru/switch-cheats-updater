@@ -8,7 +8,7 @@
 
 #include <switch.h>
 
-#define VERSION "1.1"
+#define VERSION "1.1.1"
 #define RELEASE_URL "https://github.com/HamletDuFromage/switch-cheats-db/releases/tag/v1.0"
 #define ARCHIVE_URL "https://github.com/HamletDuFromage/switch-cheats-db/releases/download/v1.0/"
 
@@ -60,7 +60,6 @@ bool isServiceRunning(const char *serviceName) {
 }
 
 void run(){    
-
     bool sxos = !(isServiceRunning("dmnt:cht") && !(isServiceRunning("tx") && !isServiceRunning("rnx")));
     u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
     bool credits = kHeld & KEY_L;
@@ -74,7 +73,8 @@ void run(){
         std::filesystem::create_directory("/atmosphere/contents");
     }
 
-    std::vector<std::string> titles = getInstalledTitles();
+    //std::vector<std::string> titles = getInstalledTitles();
+    std::vector<title> titles = getTitlesInfo();
     std::cout << "Found " << titles.size() << " installed titles" << std::endl;
     consoleUpdate(NULL);
 
@@ -91,8 +91,10 @@ void run(){
     }
     else{
         std::string url = std::string(ARCHIVE_URL) + filename;
-        if(downloadFile(url.c_str(), filename.c_str(), OFF)){
-            int upd = extractCheats(filename.c_str(), titles, sxos, credits);
+        //if(downloadFile(url.c_str(), filename.c_str(), OFF)){
+        if(1){
+            //int upd = extractCheats(filename.c_str(), titles, sxos, credits);
+            int upd = extractCheatsWithVersion(filename.c_str(), titles, sxos, credits);
             std::cout << "Successfully extacted " << upd << " cheat files" << std::endl;
             saveVersion("version.dat", ver);
         }
